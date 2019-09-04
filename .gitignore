@@ -12,3 +12,4 @@ web-report/
 
 .vscode
 yarn.lock
+.DS_STORE
