@@ -4,16 +4,17 @@ import {
 } from 'react-native';
 
 import defaultStyles from '../constants/styles';
+import SearchBox from '../components/SearchBox';
+import colors from '../constants/colors';
+import CategoriesList from '../components/Categorries/CategoriesList';
 
 const { width } = Dimensions.get('window');
 
 const LeftMainLinksScreen = () => (
   <ScrollView>
     <View style={[styles.container, defaultStyles.flex1]}>
-      <Text>Left Main Links Screen</Text>
-      <View style={styles.sample}>
-        <Text>Sample</Text>
-      </View>
+      <SearchBox />
+      <CategoriesList />
       <View style={styles.sample}>
         <Text>Sample</Text>
       </View>
@@ -31,13 +32,13 @@ const styles = StyleSheet.create({
   container: {
     width,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: colors.bg
   },
   sample: {
     height: 300,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'yellow',
     width
   }
 });
