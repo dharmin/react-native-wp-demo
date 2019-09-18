@@ -7,6 +7,7 @@ import defaultStyles from '../constants/styles';
 import SearchBox from '../components/SearchBox';
 import colors from '../constants/colors';
 import CategoriesList from '../components/Categorries/CategoriesList';
+import Topics from '../components/Topics/Topics';
 
 const { width } = Dimensions.get('window');
 
@@ -15,15 +16,7 @@ const LeftMainLinksScreen = () => (
     <View style={[styles.container, defaultStyles.flex1]}>
       <SearchBox />
       <CategoriesList />
-      <View style={styles.sample}>
-        <Text>Sample</Text>
-      </View>
-      <View style={styles.sample}>
-        <Text>Sample</Text>
-      </View>
-      <View style={styles.sample}>
-        <Text>Sample</Text>
-      </View>
+      <Topics />
     </View>
   </ScrollView>
 );
