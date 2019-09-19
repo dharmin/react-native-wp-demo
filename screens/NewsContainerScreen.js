@@ -9,6 +9,7 @@ import {
   Animated,
   PanResponder
 } from 'react-native';
+import NewsItem from '../components/NewsList/NewsItem';
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,17 +58,14 @@ const NewsContainerScreen = () => {
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
 
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: (e, gesture) => true,
+    onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gesture) => {
-      console.log(currentIndex);
       if (gesture.dy > 0 && currentIndex > 0) {
-        console.log('in if');
         swipedPosition.current.setValue({
           x: 0,
           y: -height + gesture.dy
         });
       } else {
-        console.log(gesture.dy, 'dy');
         position.current.setValue({ x: 0, y: gesture.dy });
       }
     },
@@ -101,47 +99,21 @@ const NewsContainerScreen = () => {
     }
   });
 
-  // console.log(current);
-
   return (
     <View style={styles.container}>
       {images
         .map((image, index) => {
           if (String(index) === String(currentIndex - 1)) {
-            // This is working fine
-            console.log(true, 'previous slide');
-            console.log(swipedPosition.current.getLayout(), 'layout position');
             return (
-              <Animated.View
+              <NewsItem
                 key={image.id}
-                style={swipedPosition.current.getLayout()}
-                {...panResponder.panHandlers}
-              >
-                <View key={image.id} style={styles.newsContainer}>
-                  <View style={{ flex: 2, alignItems: 'center' }}>
-                    <Image
-                      source={image.url}
-                      style={{ flex: 1, resizeMode: 'cover', width }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 2,
-                      alignItems: 'center',
-                      // justifyContent: 'center',
-                      padding: 20
-                    }}
-                  >
-                    <Text>
-                      Apple ipsum dolor sit amet, consectetur adipisicing elit.
-                      Iusto debitis ipsa deserunt nulla accusantium eaque eos
-                      minus, quos sed dignissimos commodi sunt nesciunt
-                      molestias, recusandae corrupti quidem excepturi ullam
-                      soluta?
-                    </Text>
-                  </View>
-                </View>
-              </Animated.View>
+                image={image}
+                options={{
+                  animated: true,
+                  style: swipedPosition.current.getLayout(),
+                  panHandlers: panResponder.panHandlers
+                }}
+              />
             );
           }
           if (index < currentIndex) {
@@ -149,64 +121,25 @@ const NewsContainerScreen = () => {
           }
           if (index === currentIndex) {
             return (
-              <Animated.View
+              <NewsItem
                 key={image.id}
-                style={position.current.getLayout()}
-                {...panResponder.panHandlers}
-              >
-                <View key={image.id} style={styles.newsContainer}>
-                  <View style={{ flex: 2, alignItems: 'center' }}>
-                    <Image
-                      source={image.url}
-                      style={{ flex: 1, resizeMode: 'cover', width }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 2,
-                      alignItems: 'center',
-                      // justifyContent: 'center',
-                      padding: 20
-                    }}
-                  >
-                    <Text>
-                      Apple ipsum dolor sit amet, consectetur adipisicing elit.
-                      Iusto debitis ipsa deserunt nulla accusantium eaque eos
-                      minus, quos sed dignissimos commodi sunt nesciunt
-                      molestias, recusandae corrupti quidem excepturi ullam
-                      soluta?
-                    </Text>
-                  </View>
-                </View>
-              </Animated.View>
+                image={image}
+                options={{
+                  animated: true,
+                  style: position.current.getLayout(),
+                  panHandlers: panResponder.panHandlers
+                }}
+              />
             );
           }
           return (
-            <Animated.View key={image.id}>
-              <View key={image.id} style={styles.newsContainer}>
-                <View style={{ flex: 2, alignItems: 'center' }}>
-                  <Image
-                    source={image.url}
-                    style={{ flex: 1, resizeMode: 'cover', width }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                    alignItems: 'center',
-                    // justifyContent: 'center',
-                    padding: 20
-                  }}
-                >
-                  <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Iusto debitis ipsa deserunt nulla accusantium eaque eos
-                    minus, quos sed dignissimos commodi sunt nesciunt molestias,
-                    recusandae corrupti quidem excepturi ullam soluta?
-                  </Text>
-                </View>
-              </View>
-            </Animated.View>
+            <NewsItem
+              key={image.id}
+              image={image}
+              options={{
+                animated: false
+              }}
+            />
           );
         })
         .reverse()}
