@@ -1,19 +1,10 @@
 import React from 'react';
-import {
-  ScrollView, StyleSheet, Dimensions, View, Text
-} from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import LeftMainLinksScreen from './LeftMainLinksScreen';
 import defaultStyles from '../constants/styles';
 import useMainHorizontalContext from '../contexts/MainHorizontalContext';
-
-const { width } = Dimensions.get('window');
-
-const FullScreen = ({ children, style }) => (
-  <View style={[styles.container, style]}>
-    <Text>{children}</Text>
-  </View>
-);
+import NewsContainerScreen from './NewsContainerScreen';
 
 const MainScreen = () => {
   const [isHorizontalScroll] = useMainHorizontalContext();
@@ -25,7 +16,7 @@ const MainScreen = () => {
       scrollEnabled={isHorizontalScroll}
     >
       <LeftMainLinksScreen />
-      <FullScreen style={styles.second}>Second</FullScreen>
+      <NewsContainerScreen />
     </ScrollView>
   );
 };
@@ -33,16 +24,6 @@ const MainScreen = () => {
 const styles = StyleSheet.create({
   main: {
     marginTop: getStatusBarHeight()
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'red',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width
-  },
-  second: {
-    backgroundColor: 'yellow'
   }
 });
 
