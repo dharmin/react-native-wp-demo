@@ -9,6 +9,7 @@ import {
   Animated,
   PanResponder
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import NewsItem from '../components/NewsList/NewsItem';
 
 const { width, height } = Dimensions.get('window');
@@ -52,10 +53,20 @@ const images = [
   }
 ];
 
-const NewsContainerScreen = () => {
+const NewsContainerScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
+
+  console.log(navigation);
+  console.log(navigation.getParam('categoryName'), 'category');
+
+  const category = navigation.getParam('categoryName');
+
+  if (!category) {
+    // navigation.popToTop();
+    // return;
+  }
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -162,4 +173,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewsContainerScreen;
+export default withNavigation(NewsContainerScreen);

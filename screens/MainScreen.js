@@ -6,7 +6,7 @@ import defaultStyles from '../constants/styles';
 import useMainHorizontalContext from '../contexts/MainHorizontalContext';
 import NewsContainerScreen from './NewsContainerScreen';
 
-const MainScreen = () => {
+const MainScreen = ({ navigation }) => {
   const [isHorizontalScroll] = useMainHorizontalContext();
   return (
     <ScrollView
@@ -23,7 +23,7 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   main: {
-    // marginTop: getStatusBarHeight()
+    marginTop: getStatusBarHeight()
   }
 });
 

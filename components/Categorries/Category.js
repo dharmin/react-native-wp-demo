@@ -1,15 +1,25 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import {
+  StyleSheet, View, Text, TouchableOpacity
+} from 'react-native';
+import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../../constants/colors';
 
-const Category = ({ title }) => (
-  <View style={styles.container}>
-    <Ionicons name="md-bookmark" size={40} color={colors.highlight} />
-    <View style={styles.textContainer}>
-      <Text style={styles.text}>{title}</Text>
+const Category = ({ title, navigation }) => (
+  <TouchableOpacity
+    onPress={() => {
+      if (!title) return;
+      navigation.push('Main', { categoryName: title });
+    }}
+  >
+    <View style={styles.container}>
+      <Ionicons name="md-bookmark" size={40} color={colors.highlight} />
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>{title}</Text>
+      </View>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
@@ -31,4 +41,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Category;
+export default withNavigation(Category);

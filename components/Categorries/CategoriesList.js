@@ -16,17 +16,7 @@ const CategoriesList = () => {
       <View style={styles.titleContainer}>
         <SubHeaderTitle>CATEGORIES</SubHeaderTitle>
       </View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        onTouchStart={stopMainHorizontalScroll}
-        onMomentumScrollBegin={stopMainHorizontalScroll}
-        onMomentumScrollEnd={startMainHorizontalScroll}
-        onScrollBeginDrag={stopMainHorizontalScroll}
-        onScrollEndDrag={startMainHorizontalScroll}
-        onTouchEnd={startMainHorizontalScroll}
-        onTouchCancel={startMainHorizontalScroll}
-      >
+      <ScrollView>
         <Category title="All News" />
         <Category title="Trending" />
         <Category title="Bookmarks" />
