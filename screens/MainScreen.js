@@ -23,7 +23,7 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: getStatusBarHeight()
+    // marginTop: getStatusBarHeight()
   }
 });
 

@@ -39,7 +39,6 @@ const NewsItem = ({ image, options }) => {
           style={{
             flex: 2,
             alignItems: 'center',
-            // justifyContent: 'center',
             padding: 20
           }}
         >
