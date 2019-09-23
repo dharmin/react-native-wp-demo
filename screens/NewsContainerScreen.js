@@ -58,15 +58,7 @@ const NewsContainerScreen = ({ navigation }) => {
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
 
-  console.log(navigation);
-  console.log(navigation.getParam('categoryName'), 'category');
-
   const category = navigation.getParam('categoryName');
-
-  if (!category) {
-    // navigation.popToTop();
-    // return;
-  }
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,

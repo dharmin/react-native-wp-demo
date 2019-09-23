@@ -1,14 +1,12 @@
-const initState = {
-  todo: [
-    'Apple',
-    'Orange'
-  ]
-};
+import { combineReducers } from 'redux';
+import categoriesReducer from './categories.reducer';
+import tagsReducer from './tags.reducer';
+import newsReducer from './news.reducer';
 
-const rootReducer = (state = initState, action) => {
-  switch (action.type) {
-    default: return state;
-  }
-};
+const rootReducer = combineReducers({
+  categories: categoriesReducer,
+  tags: tagsReducer,
+  news: newsReducer
+});
 
 export default rootReducer;

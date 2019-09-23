@@ -1,35 +1,45 @@
 import { gql } from 'apollo-boost';
-import client from '../config';
 
-client.query({
-  query: gql`
-    {
-      tags {
-        edges {
-          node {
-            id
-            tagId
-            name
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
+const initQuery = gql`
+  query InitialQuery {
+    tags(first: 10) {
+      edges {
+        node {
+          id
+          tagId
+          name
         }
       }
-      categories {
-        edges {
-          node {
-            id
-            categoryId
-            name
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
-  `
-});
+    categories(first: 10) {
+      edges {
+        node {
+          id
+          categoryId
+          name
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+    posts(first: 10) {
+      edges {
+        node {
+          title
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`;
+
+export default initQuery;
