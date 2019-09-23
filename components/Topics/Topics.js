@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
 import SubHeaderTitle from '../Text/SubHeaderTitle';
 import Topic from './Topic';
 
@@ -22,7 +23,12 @@ const data = [
 ];
 
 const Topics = () => {
-  const renderItem = ({ item }) => <Topic title={item} />;
+  const topics = useSelector(state => state.tags.data);
+  const renderItem = ({
+    item: {
+      node: { name }
+    }
+  }) => <Topic title={name} />;
 
   return (
     <View style={styles.container}>
@@ -30,10 +36,10 @@ const Topics = () => {
         <SubHeaderTitle>SUGGESTED TOPICS</SubHeaderTitle>
       </View>
       <FlatList
-        data={data}
+        data={topics}
         numColumns={3}
         renderItem={renderItem}
-        keyExtractor={(item, id) => id}
+        keyExtractor={item => item.node.id}
         contentContainerStyle={styles.list}
       />
     </View>

@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   text: {
-    color: colors.lightBg
+    color: colors.lightBg,
+    fontSize: 11
   }
 });
 

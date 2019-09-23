@@ -7,7 +7,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { useQuery } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
 
-import { AppLoading } from 'expo';
+// import { AppLoading } from 'expo';
 import LeftMainLinksScreen from './LeftMainLinksScreen';
 import defaultStyles from '../constants/styles';
 import useMainHorizontalContext from '../contexts/MainHorizontalContext';
@@ -17,7 +17,7 @@ import { simpleAction } from '../store/actions/common.actions';
 
 import MainLoader from '../components/Loaders/MainLoader';
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isHorizontalScroll] = useMainHorizontalContext();
   const { loading, error, data } = useQuery(initQuery);

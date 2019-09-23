@@ -1,5 +1,10 @@
 import { gql } from 'apollo-boost';
 
+const endCursor = () => `pageInfo {
+  endCursor
+  hasNextPage
+}`;
+
 const initQuery = gql`
   query InitialQuery {
     tags(first: 10) {
@@ -10,10 +15,7 @@ const initQuery = gql`
           name
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+     ${endCursor()}
     }
     categories(first: 10) {
       edges {
@@ -23,10 +25,7 @@ const initQuery = gql`
           name
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+      ${endCursor()}
     }
     posts(first: 10) {
       edges {
@@ -34,10 +33,7 @@ const initQuery = gql`
           title
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+      ${endCursor()}
     }
   }
 `;
