@@ -11,7 +11,13 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-const NewsItem = ({ image, options }) => {
+const image = require('../../assets/images/a.jpg');
+
+const NewsItem = (props) => {
+  const {
+    options, title, excerpt, featuredImage
+  } = props;
+
   let MainAnimatedView;
 
   if (options.animated) {
@@ -27,11 +33,11 @@ const NewsItem = ({ image, options }) => {
   }
 
   return (
-    <MainAnimatedView key={image.id}>
-      <View key={image.id} style={styles.newsContainer}>
+    <MainAnimatedView>
+      <View style={styles.newsContainer}>
         <View style={{ flex: 2, alignItems: 'center' }}>
           <Image
-            source={image.url}
+            source={featuredImage ? { uri: featuredImage.sourceUrl } : image}
             style={{ flex: 1, resizeMode: 'cover', width }}
           />
         </View>
@@ -42,12 +48,8 @@ const NewsItem = ({ image, options }) => {
             padding: 20
           }}
         >
-          <Text>
-            Apple ipsum dolor sit amet, consectetur adipisicing elit. Iusto
-            debitis ipsa deserunt nulla accusantium eaque eos minus, quos sed
-            dignissimos commodi sunt nesciunt molestias, recusandae corrupti
-            quidem excepturi ullam soluta?
-          </Text>
+          <Text>{title}</Text>
+          <Text>{excerpt.slice(0, 300)}</Text>
         </View>
       </View>
     </MainAnimatedView>

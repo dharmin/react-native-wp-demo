@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useRef, useCallback
+} from 'react';
 import {
-  ScrollView, StyleSheet, View, Text
+  ScrollView, StyleSheet, View, Text, Dimensions
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -17,11 +19,19 @@ import { simpleAction } from '../store/actions/common.actions';
 
 import MainLoader from '../components/Loaders/MainLoader';
 
+const { width } = Dimensions.get('window');
+
 const MainScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isHorizontalScroll] = useMainHorizontalContext();
   const { loading, error, data } = useQuery(initQuery);
   const dispatch = useDispatch();
+  const ref = useRef();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const scrollToPosition = (value) => {
+    ref.current.scrollTo({ x: value });
+  };
 
   useEffect(() => {
     if (!loading) {
@@ -35,9 +45,14 @@ const MainScreen = () => {
           </View>
         );
       }
-      dispatch(simpleAction(data)).then(() => setIsLoading(false));
+      dispatch(simpleAction(data)).then(() => {
+        if (ref.current) {
+          scrollToPosition(width);
+        }
+        setIsLoading(false);
+      });
     }
-  }, [data, dispatch, loading, error]);
+  }, [data, dispatch, loading, error, ref, scrollToPosition]);
 
   return isLoading ? (
     <MainLoader />
@@ -47,6 +62,7 @@ const MainScreen = () => {
       horizontal
       pagingEnabled
       scrollEnabled={isHorizontalScroll}
+      ref={view => (ref.current = view)}
     >
       <LeftMainLinksScreen />
       <NewsContainerScreen />

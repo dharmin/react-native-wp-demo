@@ -30,7 +30,13 @@ const initQuery = gql`
     posts(first: 10) {
       edges {
         node {
+          id
+          postId
           title
+          featuredImage {
+            sourceUrl
+          }
+          excerpt
         }
       }
       ${endCursor()}

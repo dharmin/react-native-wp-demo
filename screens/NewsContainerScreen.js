@@ -4,11 +4,10 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  Text,
-  Image,
   Animated,
   PanResponder
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import NewsItem from '../components/NewsList/NewsItem';
 
@@ -55,10 +54,9 @@ const images = [
 
 const NewsContainerScreen = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const news = useSelector(state => state.news.data);
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
-
-  const category = navigation.getParam('categoryName');
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -104,13 +102,13 @@ const NewsContainerScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {images
-        .map((image, index) => {
+      {news
+        .map(({ node }, index) => {
           if (String(index) === String(currentIndex - 1)) {
             return (
               <NewsItem
-                key={image.id}
-                image={image}
+                key={node.postId}
+                {...node}
                 options={{
                   animated: true,
                   style: swipedPosition.current.getLayout(),
@@ -125,8 +123,8 @@ const NewsContainerScreen = ({ navigation }) => {
           if (index === currentIndex) {
             return (
               <NewsItem
-                key={image.id}
-                image={image}
+                key={node.postId}
+                {...node}
                 options={{
                   animated: true,
                   style: position.current.getLayout(),
@@ -137,8 +135,8 @@ const NewsContainerScreen = ({ navigation }) => {
           }
           return (
             <NewsItem
-              key={image.id}
-              image={image}
+              key={node.postId}
+              {...node}
               options={{
                 animated: false
               }}
