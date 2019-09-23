@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,46 +7,19 @@ import {
   Animated,
   PanResponder
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withNavigation } from 'react-navigation';
-import { useLazyQuery } from '@apollo/react-hooks';
 import NewsItem from '../components/NewsList/NewsItem';
-import getPostsByCategory from '../graphql/queries/postsByCategory';
-import { setPosts } from '../store/actions/common.actions';
+
 import MainLoader from '../components/Loaders/MainLoader';
+import useNewsScreenLoaderContext from '../contexts/NewsScreenLoaderContext';
 
 const { width, height } = Dimensions.get('window');
 
-const NewsContainerScreen = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [getPosts, { loading, data }] = useLazyQuery(getPostsByCategory);
+const NewsContainerScreen = React.memo(() => {
+  const [isLoading] = useNewsScreenLoaderContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const news = useSelector(state => state.news.data);
-  const currentCategory = useSelector(
-    state => state.categories.currentCategory
-  );
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (loading) {
-      setIsLoading(true);
-      return;
-    }
-
-    if (currentCategory) {
-      // TODO:
-      // GET DATA ACCORDING TO CATEGORIES OR TOPICS
-      getPosts({
-        variables: {
-          categoryId: currentCategory
-        }
-      });
-    }
-
-    if (!loading && data) {
-      dispatch(setPosts(data)).then(() => setIsLoading(false));
-    }
-  }, [currentCategory, data, dispatch, getPosts, loading]);
 
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
@@ -93,9 +66,11 @@ const NewsContainerScreen = ({ navigation }) => {
     }
   });
 
-  return isLoading ? (
-    <MainLoader />
-  ) : (
+  if (isLoading) {
+    return <MainLoader />;
+  }
+
+  return (
     <View style={styles.container}>
       {news
         .map((item, index) => {
@@ -143,7 +118,7 @@ const NewsContainerScreen = ({ navigation }) => {
         .reverse()}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

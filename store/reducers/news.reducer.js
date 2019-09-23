@@ -26,7 +26,6 @@ const newsReducer = (state = initState, action) => {
 
     case SET_POSTS: {
       const { posts } = action.payload;
-      console.log(posts);
       return {
         ...state,
         data: posts.nodes

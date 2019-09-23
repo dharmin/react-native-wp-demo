@@ -6,13 +6,16 @@ import store from './store';
 import { MainHorizontalContextProvider } from './contexts/MainHorizontalContext';
 import MainNavigation from './navigation/MainNavigation';
 import client from './graphql/config';
+import { NewsScreenLoaderContextProvider } from './contexts/NewsScreenLoaderContext';
 
 export default function App() {
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
         <MainHorizontalContextProvider>
-          <MainNavigation />
+          <NewsScreenLoaderContextProvider>
+            <MainNavigation />
+          </NewsScreenLoaderContextProvider>
           {/* <Main */}
         </MainHorizontalContextProvider>
       </Provider>

@@ -9,18 +9,33 @@ import {
 import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
+import { useLazyQuery } from '@apollo/react-hooks';
 import colors from '../../constants/colors';
 import { changeCurrentCategory } from '../../store/actions/categories.actions';
+import useNewsScreenLoaderContext from '../../contexts/NewsScreenLoaderContext';
+import getPostsByCategory from '../../graphql/queries/postsByCategory';
+import client from '../../graphql/config';
+import { setPosts } from '../../store/actions/common.actions';
 
 const { width } = Dimensions.get('window');
 
-const Category = ({
-  title, navigation, setMainScrollPosition, id
-}) => {
+const Category = ({ title, setMainScrollPosition, id }) => {
   const dispatch = useDispatch();
+  const [, setIsLoading] = useNewsScreenLoaderContext();
 
   const setCategory = () => {
-    dispatch(changeCurrentCategory(id)).then(() => setMainScrollPosition(width));
+    dispatch(changeCurrentCategory(id))
+      .then(() => Promise.resolve(setIsLoading(true)))
+      .then(() => Promise.resolve(setMainScrollPosition(width)))
+      .then(async () => {
+        const { data } = await client.query({
+          query: getPostsByCategory,
+          variables: { categoryId: id }
+        });
+
+        return dispatch(setPosts(data));
+      })
+      .then(() => setIsLoading(false));
   };
 
   return (
