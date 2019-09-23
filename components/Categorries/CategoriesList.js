@@ -5,7 +5,7 @@ import SubHeaderTitle from '../Text/SubHeaderTitle';
 import Category from './Category';
 import useMainHorizontalContext from '../../contexts/MainHorizontalContext';
 
-const CategoriesList = () => {
+const CategoriesList = ({ setMainScrollPosition }) => {
   // const [, setIsMainHorizontalScroll] = useMainHorizontalContext();
 
   // const startMainHorizontalScroll = () => setIsMainHorizontalScroll(true);
@@ -21,7 +21,12 @@ const CategoriesList = () => {
       </View>
       <ScrollView>
         {categories.map(({ node: { name, id, categoryId } }) => (
-          <Category key={id} title={name} />
+          <Category
+            key={id}
+            title={name}
+            setMainScrollPosition={setMainScrollPosition}
+            id={id}
+          />
         ))}
       </ScrollView>
     </View>

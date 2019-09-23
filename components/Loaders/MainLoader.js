@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import defaultStyles from '../../constants/styles';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const MainLoader = () => (
   <View style={[styles.container, defaultStyles.flex1]}>
@@ -14,6 +14,7 @@ const MainLoader = () => (
 
 const styles = StyleSheet.create({
   container: {
+    width,
     height,
     justifyContent: 'center',
     alignItems: 'center'

@@ -1,4 +1,4 @@
-import { INIT_QUERY } from '../types';
+import { INIT_QUERY, SET_POSTS } from '../types';
 
 const initState = {
   data: [],
@@ -21,6 +21,15 @@ const newsReducer = (state = initState, action) => {
         data: edges,
         endCursor,
         nextPage: hasNextPage
+      };
+    }
+
+    case SET_POSTS: {
+      const { posts } = action.payload;
+      console.log(posts);
+      return {
+        ...state,
+        data: posts.nodes
       };
     }
 

@@ -1,26 +1,39 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text, TouchableOpacity
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
 import colors from '../../constants/colors';
+import { changeCurrentCategory } from '../../store/actions/categories.actions';
 
-const Category = ({ title, navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      if (!title) return;
-      navigation.push('Main', { categoryName: title });
-    }}
-  >
-    <View style={styles.container}>
-      <Ionicons name="md-bookmark" size={40} color={colors.highlight} />
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{title}</Text>
+const { width } = Dimensions.get('window');
+
+const Category = ({
+  title, navigation, setMainScrollPosition, id
+}) => {
+  const dispatch = useDispatch();
+
+  const setCategory = () => {
+    dispatch(changeCurrentCategory(id)).then(() => setMainScrollPosition(width));
+  };
+
+  return (
+    <TouchableOpacity onPress={setCategory}>
+      <View style={styles.container}>
+        <Ionicons name="md-bookmark" size={40} color={colors.highlight} />
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{title}</Text>
+        </View>
       </View>
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

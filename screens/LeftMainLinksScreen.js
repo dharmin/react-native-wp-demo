@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ScrollView, View, Text, StyleSheet, Dimensions
+  ScrollView, View, StyleSheet, Dimensions
 } from 'react-native';
 
 import defaultStyles from '../constants/styles';
@@ -11,11 +11,11 @@ import Topics from '../components/Topics/Topics';
 
 const { width } = Dimensions.get('window');
 
-const LeftMainLinksScreen = () => (
+const LeftMainLinksScreen = ({ setMainScrollPosition }) => (
   <ScrollView>
     <View style={[styles.container, defaultStyles.flex1]}>
       <SearchBox />
-      <CategoriesList />
+      <CategoriesList setMainScrollPosition={setMainScrollPosition} />
       <Topics />
     </View>
   </ScrollView>

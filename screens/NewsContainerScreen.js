@@ -7,54 +7,47 @@ import {
   Animated,
   PanResponder
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { withNavigation } from 'react-navigation';
+import { useLazyQuery } from '@apollo/react-hooks';
 import NewsItem from '../components/NewsList/NewsItem';
+import getPostsByCategory from '../graphql/queries/postsByCategory';
+import { setPosts } from '../store/actions/common.actions';
+import MainLoader from '../components/Loaders/MainLoader';
 
 const { width, height } = Dimensions.get('window');
 
-const images = [
-  {
-    id: 1,
-    url: require('../assets/images/a.jpg')
-  },
-  {
-    id: 2,
-    url: require('../assets/images/b.jpg')
-  },
-  {
-    id: 3,
-    url: require('../assets/images/c.jpg')
-  },
-  {
-    id: 4,
-    url: require('../assets/images/d.jpg')
-  },
-  {
-    id: 5,
-    url: require('../assets/images/e.jpg')
-  },
-  {
-    id: 6,
-    url: require('../assets/images/f.jpg')
-  },
-  {
-    id: 7,
-    url: require('../assets/images/g.jpg')
-  },
-  {
-    id: 8,
-    url: require('../assets/images/h.jpg')
-  },
-  {
-    id: 9,
-    url: require('../assets/images/i.jpg')
-  }
-];
-
 const NewsContainerScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [getPosts, { loading, data }] = useLazyQuery(getPostsByCategory);
   const [currentIndex, setCurrentIndex] = useState(0);
   const news = useSelector(state => state.news.data);
+  const currentCategory = useSelector(
+    state => state.categories.currentCategory
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (loading) {
+      setIsLoading(true);
+      return;
+    }
+
+    if (currentCategory) {
+      // TODO:
+      // GET DATA ACCORDING TO CATEGORIES OR TOPICS
+      getPosts({
+        variables: {
+          categoryId: currentCategory
+        }
+      });
+    }
+
+    if (!loading && data) {
+      dispatch(setPosts(data)).then(() => setIsLoading(false));
+    }
+  }, [currentCategory, data, dispatch, getPosts, loading]);
+
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
 
@@ -100,10 +93,14 @@ const NewsContainerScreen = ({ navigation }) => {
     }
   });
 
-  return (
+  return isLoading ? (
+    <MainLoader />
+  ) : (
     <View style={styles.container}>
       {news
-        .map(({ node }, index) => {
+        .map((item, index) => {
+          const node = item.node || { ...item };
+
           if (String(index) === String(currentIndex - 1)) {
             return (
               <NewsItem

@@ -1,4 +1,4 @@
-import { INIT_QUERY } from '../types';
+import { INIT_QUERY, SET_POSTS } from '../types';
 
 export const simpleAction = data => (dispatch) => {
   dispatch({
@@ -7,5 +7,16 @@ export const simpleAction = data => (dispatch) => {
       ...data
     }
   });
+  return Promise.resolve(true);
+};
+
+export const setPosts = ({ category, tags }) => (dispatch) => {
+  dispatch({
+    type: SET_POSTS,
+    payload: {
+      posts: category ? category.posts : tags.posts
+    }
+  });
+
   return Promise.resolve(true);
 };

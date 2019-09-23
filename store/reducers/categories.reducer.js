@@ -1,9 +1,10 @@
-import { INIT_QUERY } from '../types';
+import { INIT_QUERY, CHANGE_CATEGORY } from '../types';
 
 const initState = {
   data: [],
   endCursor: '',
-  nextPage: false
+  nextPage: false,
+  currentCategory: null
 };
 
 const categoriesReducer = (state = initState, action) => {
@@ -22,6 +23,15 @@ const categoriesReducer = (state = initState, action) => {
         nextPage: hasNextPage
       };
     }
+
+    case CHANGE_CATEGORY: {
+      const { categoryId } = action.payload;
+      return {
+        ...state,
+        currentCategory: categoryId
+      };
+    }
+
     default:
       return state;
   }

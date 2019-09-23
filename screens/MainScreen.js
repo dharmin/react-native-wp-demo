@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useState, useRef, useCallback
-} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   ScrollView, StyleSheet, View, Text, Dimensions
 } from 'react-native';
@@ -52,7 +50,7 @@ const MainScreen = () => {
         setIsLoading(false);
       });
     }
-  }, [data, dispatch, loading, error, ref, scrollToPosition]);
+  }, [data, dispatch, loading, error, scrollToPosition]);
 
   return isLoading ? (
     <MainLoader />
@@ -64,7 +62,7 @@ const MainScreen = () => {
       scrollEnabled={isHorizontalScroll}
       ref={view => (ref.current = view)}
     >
-      <LeftMainLinksScreen />
+      <LeftMainLinksScreen setMainScrollPosition={scrollToPosition} />
       <NewsContainerScreen />
     </ScrollView>
   );
