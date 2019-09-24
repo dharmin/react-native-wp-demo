@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  PanResponder
+  PanResponder,
+  Text
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { withNavigation } from 'react-navigation';
@@ -13,6 +14,8 @@ import NewsItem from '../components/NewsList/NewsItem';
 
 import MainLoader from '../components/Loaders/MainLoader';
 import useNewsScreenLoaderContext from '../contexts/NewsScreenLoaderContext';
+import colors from '../constants/colors';
+import BackButton from '../components/Buttons/BackButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -74,54 +77,65 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
 
   return (
     <View style={styles.container}>
-      {news
-        .map((item, index) => {
-          const node = item.node || { ...item };
+      {news.length ? (
+        news
+          .map((item, index) => {
+            const node = item.node || { ...item };
 
-          if (String(index) === String(currentIndex - 1)) {
+            if (String(index) === String(currentIndex - 1)) {
+              return (
+                <NewsItem
+                  key={node.postId}
+                  {...node}
+                  options={{
+                    animated: true,
+                    style: swipedPosition.current.getLayout(),
+                    panHandlers: panResponder.panHandlers
+                  }}
+                  setMainScrollPosition={setMainScrollPosition}
+                />
+              );
+            }
+            if (index < currentIndex) {
+              return;
+            }
+            if (index > news.length - 1) return;
+            if (index === currentIndex) {
+              return (
+                <NewsItem
+                  key={node.postId}
+                  {...node}
+                  options={{
+                    animated: true,
+                    style: position.current.getLayout(),
+                    panHandlers: panResponder.panHandlers
+                  }}
+                  setMainScrollPosition={setMainScrollPosition}
+                />
+              );
+            }
             return (
               <NewsItem
                 key={node.postId}
                 {...node}
                 options={{
-                  animated: true,
-                  style: swipedPosition.current.getLayout(),
-                  panHandlers: panResponder.panHandlers
+                  animated: false
                 }}
                 setMainScrollPosition={setMainScrollPosition}
               />
             );
-          }
-          if (index < currentIndex) {
-            return;
-          }
-          if (index > news.length - 1) return;
-          if (index === currentIndex) {
-            return (
-              <NewsItem
-                key={node.postId}
-                {...node}
-                options={{
-                  animated: true,
-                  style: position.current.getLayout(),
-                  panHandlers: panResponder.panHandlers
-                }}
-                setMainScrollPosition={setMainScrollPosition}
-              />
-            );
-          }
-          return (
-            <NewsItem
-              key={node.postId}
-              {...node}
-              options={{
-                animated: false
-              }}
-              setMainScrollPosition={setMainScrollPosition}
-            />
-          );
-        })
-        .reverse()}
+          })
+          .reverse()
+      ) : (
+        <View style={{ flex: 1 }}>
+          <BackButton setMainScrollPosition={setMainScrollPosition} />
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text>No News Found...</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 });
@@ -129,15 +143,8 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
+    backgroundColor: colors.lightBg,
     width
-  },
-  newsContainer: {
-    flex: 1,
-    position: 'absolute',
-    height,
-    width,
-    backgroundColor: 'yellow'
   }
 });
 

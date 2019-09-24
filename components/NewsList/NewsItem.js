@@ -10,7 +10,10 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+// import HTML from 'react-native-render-html';
+import { WebView } from 'react-native-webview';
 import colors from '../../constants/colors';
+import BackButton from '../Buttons/BackButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -42,14 +45,7 @@ const NewsItem = (props) => {
   return (
     <MainAnimatedView>
       <View style={styles.newsContainer}>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity
-            onPress={() => setMainScrollPosition(0)}
-            style={styles.btn}
-          >
-            <Ionicons name="ios-arrow-round-back" size={24} />
-          </TouchableOpacity>
-        </View>
+        <BackButton setMainScrollPosition={setMainScrollPosition} />
         <View style={{ flex: 2, alignItems: 'center' }}>
           <Image
             source={featuredImage ? { uri: featuredImage.sourceUrl } : image}
@@ -63,8 +59,13 @@ const NewsItem = (props) => {
             padding: 20
           }}
         >
-          <Text>{title}</Text>
-          <Text>{excerpt.slice(0, 300)}</Text>
+          <Text style={styles.title}>{title}</Text>
+          {/* <Text style={styles.content}>{excerpt.slice(0, 300)}</Text> */}
+
+          {/* <WebView originWhitelist={['*']} source={'<h1>Hello World</h1>'} /> */}
+          <Text style={styles.content}>
+            {excerpt.replace(/<\/?[^>]+(>|$)/g, '').slice(0, 400)}
+          </Text>
         </View>
       </View>
     </MainAnimatedView>
@@ -77,25 +78,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height,
     width,
-    backgroundColor: 'yellow'
+    backgroundColor: colors.lightBg
   },
-  btnContainer: {
-    position: 'absolute',
-    backgroundColor: colors.lightBg,
-    zIndex: 1,
-    height: 45,
-    width: 45,
-    marginHorizontal: 15,
-    marginVertical: 15,
-    borderRadius: 45 / 2,
-    elevation: 1,
-    overflow: 'hidden'
+  title: {
+    fontFamily: 'roboto',
+    fontSize: 22,
+    marginVertical: 5
   },
-  btn: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
+  content: {
+    fontFamily: 'robotoLight',
+    fontSize: 16,
+    lineHeight: 25
   }
 });
 

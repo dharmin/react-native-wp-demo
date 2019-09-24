@@ -44,10 +44,10 @@ const MainScreen = () => {
         );
       }
       dispatch(simpleAction(data)).then(() => {
+        setIsLoading(false);
         if (ref.current) {
           scrollToPosition(width);
         }
-        setIsLoading(false);
       });
     }
   }, [data, dispatch, loading, error, scrollToPosition]);
