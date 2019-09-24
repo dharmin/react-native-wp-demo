@@ -1,23 +1,55 @@
 import React from 'react';
 import {
-  View, Text, StyleSheet, Button
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Platform
 } from 'react-native';
-
-// TODO:
-// Need to build a custom search box;
+import { Ionicons } from '@expo/vector-icons';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import colors from '../constants/colors';
 
 const SearchQueryScreen = ({ navigation }) => (
-  <View style={styles.container}>
-    <Button title="Back" onPress={() => navigation.pop()} />
-    <Text>Search Query Screen</Text>
-  </View>
+  <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => navigation.pop()}
+        >
+          <Ionicons name="ios-arrow-round-back" size={35} color={colors.bg} />
+        </TouchableOpacity>
+        <TextInput
+          placeholder="Search for news"
+          placeholderTextColor={colors.darkHeadColor}
+          style={styles.input}
+        />
+      </View>
+    </View>
+  </SafeAreaView>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: '100%'
+  },
+  searchContainer: {
+    marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
+    backgroundColor: '#ddd',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomColor: colors.darkHeadColor,
+    borderBottomWidth: 1
+  },
+  backBtn: {
+    paddingHorizontal: 15
+  },
+  input: {
+    fontSize: 16
   }
 });
 
