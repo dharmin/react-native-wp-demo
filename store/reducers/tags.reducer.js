@@ -1,9 +1,10 @@
-import { INIT_QUERY } from '../types';
+import { INIT_QUERY, CHANGE_CATEGORY, CHANGE_TAG } from '../types';
 
 const initState = {
   data: [],
   endCursor: '',
-  nextPage: false
+  nextPage: false,
+  currentTag: null
 };
 
 const tagsReducer = (state = initState, action) => {
@@ -21,6 +22,22 @@ const tagsReducer = (state = initState, action) => {
         data: edges,
         endCursor,
         nextPage: hasNextPage
+      };
+    }
+
+    case CHANGE_TAG: {
+      const { tagId } = action.payload;
+
+      return {
+        ...state,
+        currentTag: tagId
+      };
+    }
+
+    case CHANGE_CATEGORY: {
+      return {
+        ...state,
+        currentTag: null
       };
     }
 

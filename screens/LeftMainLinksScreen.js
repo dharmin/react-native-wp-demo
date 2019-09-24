@@ -16,7 +16,7 @@ const LeftMainLinksScreen = ({ setMainScrollPosition }) => (
     <View style={[styles.container, defaultStyles.flex1]}>
       <SearchBox />
       <CategoriesList setMainScrollPosition={setMainScrollPosition} />
-      <Topics />
+      <Topics setMainScrollPosition={setMainScrollPosition} />
     </View>
   </ScrollView>
 );

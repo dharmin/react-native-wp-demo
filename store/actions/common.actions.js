@@ -10,11 +10,11 @@ export const simpleAction = data => (dispatch) => {
   return Promise.resolve(true);
 };
 
-export const setPosts = ({ category, tags }) => (dispatch) => {
+export const setPosts = ({ category, tag }) => (dispatch) => {
   dispatch({
     type: SET_POSTS,
     payload: {
-      posts: category ? category.posts : tags.posts
+      posts: category ? category.posts : tag.posts
     }
   });
 

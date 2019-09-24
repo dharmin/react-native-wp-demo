@@ -1,4 +1,4 @@
-import { INIT_QUERY, CHANGE_CATEGORY } from '../types';
+import { INIT_QUERY, CHANGE_CATEGORY, CHANGE_TAG } from '../types';
 
 const initState = {
   data: [],
@@ -29,6 +29,13 @@ const categoriesReducer = (state = initState, action) => {
       return {
         ...state,
         currentCategory: categoryId
+      };
+    }
+
+    case CHANGE_TAG: {
+      return {
+        ...state,
+        currentCategory: null
       };
     }
 

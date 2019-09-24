@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from '../../constants/colors';
 import { changeCurrentCategory } from '../../store/actions/categories.actions';
 import useNewsScreenLoaderContext from '../../contexts/NewsScreenLoaderContext';
@@ -21,8 +21,12 @@ const { width } = Dimensions.get('window');
 const Category = ({ title, setMainScrollPosition, id }) => {
   const dispatch = useDispatch();
   const [, setIsLoading] = useNewsScreenLoaderContext();
-
+  const currentCategory = useSelector(
+    state => state.categories.currentCategory
+  );
   const setCategory = () => {
+    if (currentCategory === id) return;
+
     dispatch(changeCurrentCategory(id))
       .then(() => Promise.resolve(setIsLoading(true)))
       .then(() => Promise.resolve(setMainScrollPosition(width)))

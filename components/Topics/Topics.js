@@ -22,13 +22,15 @@ const data = [
   'Business'
 ];
 
-const Topics = () => {
+const Topics = ({ setMainScrollPosition }) => {
   const topics = useSelector(state => state.tags.data);
   const renderItem = ({
     item: {
-      node: { name }
+      node: { name, id }
     }
-  }) => <Topic title={name} />;
+  }) => (
+    <Topic title={name} id={id} setMainScrollPosition={setMainScrollPosition} />
+  );
 
   return (
     <View style={styles.container}>

@@ -1,16 +1,54 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../../constants/colors';
+import useNewsScreenLoaderContext from '../../contexts/NewsScreenLoaderContext';
+import { changeCurrentTag } from '../../store/actions/tags.action';
+import client from '../../graphql/config';
+import getPostsByTag from '../../graphql/queries/postsByTag';
+import { setPosts } from '../../store/actions/common.actions';
 
-const Topic = ({ title }) => (
-  <View style={styles.topicContainer}>
-    <Ionicons name="ios-globe" size={60} color={colors.highlight} />
-    <View style={styles.textContainer}>
-      <Text style={styles.text}>{title}</Text>
-    </View>
-  </View>
-);
+const { width } = Dimensions.get('window');
+
+const Topic = ({ title, id, setMainScrollPosition }) => {
+  const dispatch = useDispatch();
+  const [, setIsLoading] = useNewsScreenLoaderContext();
+  const currentTopic = useSelector(state => state.tags.currentTag);
+  const setCurrentTopic = () => {
+    if (currentTopic === id) return;
+
+    dispatch(changeCurrentTag(id))
+      .then(() => Promise.resolve(setIsLoading(true)))
+      .then(() => Promise.resolve(setMainScrollPosition(width)))
+      .then(async () => {
+        const { data } = await client.query({
+          query: getPostsByTag,
+          variables: { categoryId: id }
+        });
+
+        return dispatch(setPosts(data));
+      })
+      .then(() => setIsLoading(false));
+  };
+
+  return (
+    <TouchableOpacity onPress={setCurrentTopic}>
+      <View style={styles.topicContainer}>
+        <Ionicons name="ios-globe" size={60} color={colors.highlight} />
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{title}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   topicContainer: {
