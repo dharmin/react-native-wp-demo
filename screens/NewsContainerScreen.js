@@ -16,7 +16,7 @@ import useNewsScreenLoaderContext from '../contexts/NewsScreenLoaderContext';
 
 const { width, height } = Dimensions.get('window');
 
-const NewsContainerScreen = React.memo(() => {
+const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
   const [isLoading] = useNewsScreenLoaderContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const news = useSelector(state => state.news.data);
@@ -86,6 +86,7 @@ const NewsContainerScreen = React.memo(() => {
                   style: swipedPosition.current.getLayout(),
                   panHandlers: panResponder.panHandlers
                 }}
+                setMainScrollPosition={setMainScrollPosition}
               />
             );
           }
@@ -102,6 +103,7 @@ const NewsContainerScreen = React.memo(() => {
                   style: position.current.getLayout(),
                   panHandlers: panResponder.panHandlers
                 }}
+                setMainScrollPosition={setMainScrollPosition}
               />
             );
           }

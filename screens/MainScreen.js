@@ -63,7 +63,7 @@ const MainScreen = () => {
       ref={view => (ref.current = view)}
     >
       <LeftMainLinksScreen setMainScrollPosition={scrollToPosition} />
-      <NewsContainerScreen />
+      <NewsContainerScreen setMainScrollPosition={scrollToPosition} />
     </ScrollView>
   );
 };

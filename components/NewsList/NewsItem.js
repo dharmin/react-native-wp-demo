@@ -6,8 +6,10 @@ import {
   View,
   Animated,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,7 +17,11 @@ const image = require('../../assets/images/a.jpg');
 
 const NewsItem = (props) => {
   const {
-    options, title, excerpt, featuredImage
+    options,
+    title,
+    excerpt,
+    featuredImage,
+    setMainScrollPosition
   } = props;
 
   let MainAnimatedView;
@@ -35,6 +41,11 @@ const NewsItem = (props) => {
   return (
     <MainAnimatedView>
       <View style={styles.newsContainer}>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity onPress={() => setMainScrollPosition(0)}>
+            <Ionicons name="ios-arrow-round-back" size={24} />
+          </TouchableOpacity>
+        </View>
         <View style={{ flex: 2, alignItems: 'center' }}>
           <Image
             source={featuredImage ? { uri: featuredImage.sourceUrl } : image}
@@ -63,6 +74,20 @@ const styles = StyleSheet.create({
     height,
     width,
     backgroundColor: 'yellow'
+  },
+  btnContainer: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    zIndex: 1,
+    height: 30,
+    width: 30,
+    marginHorizontal: 15,
+    marginVertical: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    elevation: 1,
+    overflow: 'hidden'
   }
 });
 
