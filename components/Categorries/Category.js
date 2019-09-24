@@ -9,7 +9,6 @@ import {
 import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { useLazyQuery } from '@apollo/react-hooks';
 import colors from '../../constants/colors';
 import { changeCurrentCategory } from '../../store/actions/categories.actions';
 import useNewsScreenLoaderContext from '../../contexts/NewsScreenLoaderContext';
