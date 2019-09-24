@@ -6,12 +6,8 @@ import {
   View,
   Animated,
   Image,
-  Dimensions,
-  TouchableOpacity
+  Dimensions
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-// import HTML from 'react-native-render-html';
-import { WebView } from 'react-native-webview';
 import colors from '../../constants/colors';
 import BackButton from '../Buttons/BackButton';
 
@@ -60,9 +56,6 @@ const NewsItem = (props) => {
           }}
         >
           <Text style={styles.title}>{title}</Text>
-          {/* <Text style={styles.content}>{excerpt.slice(0, 300)}</Text> */}
-
-          {/* <WebView originWhitelist={['*']} source={'<h1>Hello World</h1>'} /> */}
           <Text style={styles.content}>
             {excerpt.replace(/<\/?[^>]+(>|$)/g, '').slice(0, 400)}
           </Text>

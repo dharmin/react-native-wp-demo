@@ -30,18 +30,26 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gesture) => {
+      if (gesture.dy < 0 && currentIndex === news.length - 1) {
+        position.current.setValue({ x: 0, y: 0 });
+        return;
+      }
+
       if (gesture.dy > 0 && currentIndex > 0) {
         swipedPosition.current.setValue({
           x: 0,
           y: -height + gesture.dy
         });
-      } else if (currentIndex === news.length - 1) {
-        position.current.setValue({ x: 0, y: 0 });
       } else {
         position.current.setValue({ x: 0, y: gesture.dy });
       }
     },
     onPanResponderRelease: (e, gesture) => {
+      if (gesture.dy < 0 && currentIndex === news.length - 1) {
+        position.current.setValue({ x: 0, y: 0 });
+        return;
+      }
+
       if (currentIndex > 0 && gesture.dy > 50 && gesture.vy > 0.7) {
         Animated.timing(swipedPosition.current, {
           toValue: { x: 0, y: 0 },

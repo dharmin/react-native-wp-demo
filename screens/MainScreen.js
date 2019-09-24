@@ -7,7 +7,6 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { useQuery } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
 
-// import { AppLoading } from 'expo';
 import LeftMainLinksScreen from './LeftMainLinksScreen';
 import defaultStyles from '../constants/styles';
 import useMainHorizontalContext from '../contexts/MainHorizontalContext';

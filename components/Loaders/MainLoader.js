@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  View, Text, StyleSheet, Dimensions
+  ActivityIndicator, StyleSheet, View, Dimensions
 } from 'react-native';
-import defaultStyles from '../../constants/styles';
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-const MainLoader = () => (
-  <View style={[styles.container, defaultStyles.flex1]}>
-    <Text styles={styles.text}>Loading...</Text>
-  </View>
-);
+export default class MainLoader extends Component {
+  render() {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
-    width,
-    height,
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    width
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
   }
 });
 
-export default MainLoader;
+// export default MainLoader;

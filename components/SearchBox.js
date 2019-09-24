@@ -2,11 +2,15 @@ import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/colors';
 
-const SearchBox = () => (
-  <TouchableOpacity style={{ width: '80%' }}>
+const SearchBox = ({ navigation }) => (
+  <TouchableOpacity
+    style={{ width: '80%' }}
+    onPress={() => navigation.navigate('Search')}
+  >
     <View style={styles.searchContainer}>
       <Ionicons name="ios-search" size={24} color={colors.lightText} />
       <Text style={styles.searchText}>Search For News</Text>
@@ -31,4 +35,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchBox;
+export default withNavigation(SearchBox);
