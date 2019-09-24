@@ -10,6 +10,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import colors from '../../constants/colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -42,7 +43,10 @@ const NewsItem = (props) => {
     <MainAnimatedView>
       <View style={styles.newsContainer}>
         <View style={styles.btnContainer}>
-          <TouchableOpacity onPress={() => setMainScrollPosition(0)}>
+          <TouchableOpacity
+            onPress={() => setMainScrollPosition(0)}
+            style={styles.btn}
+          >
             <Ionicons name="ios-arrow-round-back" size={24} />
           </TouchableOpacity>
         </View>
@@ -77,17 +81,21 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     position: 'absolute',
-    backgroundColor: '#fff',
+    backgroundColor: colors.lightBg,
     zIndex: 1,
-    height: 30,
-    width: 30,
+    height: 45,
+    width: 45,
     marginHorizontal: 15,
     marginVertical: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 45 / 2,
     elevation: 1,
     overflow: 'hidden'
+  },
+  btn: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

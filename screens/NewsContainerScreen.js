@@ -32,6 +32,8 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
           x: 0,
           y: -height + gesture.dy
         });
+      } else if (currentIndex === news.length - 1) {
+        position.current.setValue({ x: 0, y: 0 });
       } else {
         position.current.setValue({ x: 0, y: gesture.dy });
       }
@@ -93,6 +95,7 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
           if (index < currentIndex) {
             return;
           }
+          if (index > news.length - 1) return;
           if (index === currentIndex) {
             return (
               <NewsItem
@@ -114,6 +117,7 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
               options={{
                 animated: false
               }}
+              setMainScrollPosition={setMainScrollPosition}
             />
           );
         })
