@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import colors from '../../constants/colors';
 
-const SearchedNewsList = ({ posts }) => {
+const SearchedNewsList = ({ posts, handlePostPress }) => {
   const handleRenderItem = ({ item: { title, id } }) => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => handlePostPress(id)}>
       <View style={styles.item}>
         <Text style={styles.itemTitle}>{title}</Text>
       </View>
