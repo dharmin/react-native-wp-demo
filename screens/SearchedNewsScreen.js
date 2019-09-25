@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -26,7 +27,7 @@ const { width, height } = Dimensions.get('window');
 
 const SearchedNewsScreen = ({ navigation }) => {
   const [isLoading] = useSearchedNewsListLoaderContext();
-  const { query } = useSelector(state => state.search);
+  const { query, posts } = useSelector(state => state.search);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollToPosition = (value) => {
     ref.current.scrollTo({ x: value });
@@ -50,7 +51,7 @@ const SearchedNewsScreen = ({ navigation }) => {
         >
           <SearchQuery disabled query={query} />
         </TouchableOpacity>
-        <SearchedNewsList />
+        <SearchedNewsList posts={posts} />
       </View>
       <NewsContainerScreen />
     </ScrollView>
@@ -59,7 +60,7 @@ const SearchedNewsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: getStatusBarHeight()
+    marginTop: Platform.OS !== 'android' ? getStatusBarHeight() : 0
   },
   container: {
     flex: 1,
