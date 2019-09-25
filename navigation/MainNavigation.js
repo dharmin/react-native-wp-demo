@@ -2,11 +2,13 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import MainScreen from '../screens/MainScreen';
 import SearchQueryScreen from '../screens/SearchQueryScreen';
+import SearchedNewsScreen from '../screens/SearchedNewsScreen';
 
 const MainNavigator = createStackNavigator(
   {
     Main: MainScreen,
-    Search: SearchQueryScreen
+    Search: SearchQueryScreen,
+    SearchedNews: SearchedNewsScreen
   },
   {
     headerMode: 'none',

@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  ScrollView, StyleSheet, View, Text, Dimensions
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Platform
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -45,6 +50,7 @@ const MainScreen = () => {
       dispatch(simpleAction(data)).then(() => {
         setIsLoading(false);
         if (ref.current) {
+          // TODO: Need to fix later
           scrollToPosition(width);
         }
       });

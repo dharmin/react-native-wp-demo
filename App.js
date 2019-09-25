@@ -11,6 +11,7 @@ import { MainHorizontalContextProvider } from './contexts/MainHorizontalContext'
 import MainNavigation from './navigation/MainNavigation';
 import client from './graphql/config';
 import { NewsScreenLoaderContextProvider } from './contexts/NewsScreenLoaderContext';
+import { SearchedNewsListLoaderContextProvider } from './contexts/SearchedNewsListLoaderContext';
 
 const loadFonts = () => Font.loadAsync({
   roboto: require('./assets/fonts/Roboto-Regular.ttf'),
@@ -33,9 +34,10 @@ export default function App() {
       <Provider store={store}>
         <MainHorizontalContextProvider>
           <NewsScreenLoaderContextProvider>
-            <MainNavigation />
+            <SearchedNewsListLoaderContextProvider>
+              <MainNavigation />
+            </SearchedNewsListLoaderContextProvider>
           </NewsScreenLoaderContextProvider>
-          {/* <Main */}
         </MainHorizontalContextProvider>
       </Provider>
     </ApolloProvider>

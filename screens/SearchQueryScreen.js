@@ -1,47 +1,46 @@
-import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Platform
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import colors from '../constants/colors';
+import React from 'react';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+
+import { useDispatch } from 'react-redux';
+
+import client from '../graphql/config';
+import searchPosts from '../graphql/queries/searchPosts';
+import { setSearchData } from '../store/actions/search.actions';
+import useSearchedNewsListLoaderContext from '../contexts/SearchedNewsListLoaderContext';
+import SearchQuery from '../components/Search/SearchQuery';
 
 const SearchQueryScreen = ({ navigation }) => {
-  const [query, setQuery] = useState('');
-  const [prevQueries, setPrevQueries] = useState([]);
-  const handleQueryChange = value => setQuery(value);
+  const [, setLoading] = useSearchedNewsListLoaderContext();
+  const dispatch = useDispatch();
 
-  const handleQuerySubmit = () => {
+  const handleQuerySubmit = (query) => {
     if (query) {
-      setPrevQueries([...prevQueries, query]);
+      // Fetches data according to the query
+      setLoading(true);
+      navigation.navigate('SearchedNews');
+      client
+        .query({
+          query: searchPosts,
+          variables: {
+            keyword: query,
+            cursor: ''
+          }
+        })
+        .then(({ data: { posts: { nodes, pageInfo } } }) => dispatch(
+          setSearchData({
+            query,
+            nodes,
+            pageInfo
+          })
+        ))
+        .then(() => setLoading(false));
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => navigation.pop()}
-          >
-            <Ionicons name="ios-arrow-round-back" size={35} color={colors.bg} />
-          </TouchableOpacity>
-          <TextInput
-            placeholder="Search for news"
-            placeholderTextColor={colors.darkHeadColor}
-            style={styles.input}
-            onChangeText={handleQueryChange}
-            onSubmitEditing={handleQuerySubmit}
-            value={query}
-            keyboardAppearance="dark"
-          />
-        </View>
+        <SearchQuery handleQuerySubmit={handleQuerySubmit} disabled={false} />
       </View>
     </SafeAreaView>
   );
@@ -51,22 +50,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%'
-  },
-  searchContainer: {
-    marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
-    backgroundColor: '#ddd',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomColor: colors.darkHeadColor,
-    borderBottomWidth: 1
-  },
-  backBtn: {
-    paddingHorizontal: 15
-  },
-  input: {
-    fontSize: 16,
-    flexGrow: 1
   }
 });
 
