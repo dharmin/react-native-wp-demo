@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,25 +11,41 @@ import { Ionicons } from '@expo/vector-icons';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import colors from '../constants/colors';
 
-const SearchQueryScreen = ({ navigation }) => (
-  <SafeAreaView style={styles.container}>
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => navigation.pop()}
-        >
-          <Ionicons name="ios-arrow-round-back" size={35} color={colors.bg} />
-        </TouchableOpacity>
-        <TextInput
-          placeholder="Search for news"
-          placeholderTextColor={colors.darkHeadColor}
-          style={styles.input}
-        />
+const SearchQueryScreen = ({ navigation }) => {
+  const [query, setQuery] = useState('');
+  const [prevQueries, setPrevQueries] = useState([]);
+  const handleQueryChange = value => setQuery(value);
+
+  const handleQuerySubmit = () => {
+    if (query) {
+      setPrevQueries([...prevQueries, query]);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => navigation.pop()}
+          >
+            <Ionicons name="ios-arrow-round-back" size={35} color={colors.bg} />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Search for news"
+            placeholderTextColor={colors.darkHeadColor}
+            style={styles.input}
+            onChangeText={handleQueryChange}
+            onSubmitEditing={handleQuerySubmit}
+            value={query}
+            keyboardAppearance="dark"
+          />
+        </View>
       </View>
-    </View>
-  </SafeAreaView>
-);
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +65,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   input: {
-    fontSize: 16
+    fontSize: 16,
+    flexGrow: 1
   }
 });
 
