@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -10,7 +9,7 @@ import {
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLazyQuery } from '@apollo/react-hooks';
 
 import useSearchedNewsListLoaderContext from '../contexts/SearchedNewsListLoaderContext';
@@ -21,19 +20,23 @@ import SearchQuery from '../components/Search/SearchQuery';
 import MainLoader from '../components/Loaders/MainLoader';
 import SearchNewsItem from '../components/NewsList/SearchNewsItem';
 import getSinglePost from '../graphql/queries/getSinglePost';
+import client from '../graphql/config';
+import searchPosts from '../graphql/queries/searchPosts';
+import { setSearchData } from '../store/actions/search.actions';
 
-const { width, height } = Dimensions.get('window');
-
-// TODO:
-// 1 - Show list of all searched posts
-// 2 - Then Make that search component
-// 3 - Then fetch a single post data and display it in another side
+const { width } = Dimensions.get('window');
 
 const SearchedNewsScreen = ({ navigation }) => {
   const [isLoading] = useSearchedNewsListLoaderContext();
+  const {
+    query, posts, cursor, hasPrevPage
+  } = useSelector(
+    state => state.search
+  );
   const [getPost, { loading, data }] = useLazyQuery(getSinglePost);
 
-  const { query, posts } = useSelector(state => state.search);
+  const dispatch = useDispatch();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollToPosition = (value) => {
     ref.current.scrollTo({ x: value });
@@ -50,6 +53,26 @@ const SearchedNewsScreen = ({ navigation }) => {
     scrollToPosition(width);
   };
 
+  const handleEndReached = () => {
+    client
+      .query({
+        query: searchPosts,
+        variables: {
+          keyword: query,
+          cursor
+        }
+      })
+      .then(({ data: { posts: { nodes, pageInfo } } }) => dispatch(
+        setSearchData({
+          query,
+          nodes,
+          pageInfo
+        })
+      ));
+
+    return Promise.resolve(true);
+  };
+
   return (
     <ScrollView
       style={[styles.main, defaultStyles.flex1]}
@@ -63,13 +86,17 @@ const SearchedNewsScreen = ({ navigation }) => {
         <View style={styles.container}>
           <TouchableOpacity
             onPress={() => {
-              console.log('here');
               navigation.pop();
             }}
           >
             <SearchQuery disabled query={query} />
           </TouchableOpacity>
-          <SearchedNewsList posts={posts} handlePostPress={handlePostPress} />
+          <SearchedNewsList
+            posts={posts}
+            handlePostPress={handlePostPress}
+            handleEndReached={handleEndReached}
+            hasPrevPage={hasPrevPage}
+          />
         </View>
       )}
       <SearchNewsItem

@@ -8,7 +8,7 @@ const searchPosts = gql`
         id
       }
       pageInfo {
-        endCursor
+        startCursor
         hasPreviousPage
       }
     }

@@ -19,7 +19,9 @@ const SearchQuery = ({
 }) => {
   const [localQuery, setQuery] = useState('');
 
-  const handleQueryChange = value => setQuery(value);
+  const handleQueryChange = (value) => {
+    setQuery(value);
+  };
 
   return (
     <View style={styles.searchContainer}>
@@ -32,7 +34,11 @@ const SearchQuery = ({
         placeholderTextColor={colors.darkHeadColor}
         style={styles.input}
         onChangeText={handleQueryChange}
-        onSubmitEditing={() => handleQuerySubmit(localQuery)}
+        onSubmitEditing={() => {
+          if (localQuery) {
+            handleQuerySubmit(localQuery);
+          }
+        }}
         value={query || localQuery}
         keyboardAppearance="dark"
         underlineColorAndroid="transparent"

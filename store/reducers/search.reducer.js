@@ -14,16 +14,22 @@ const searchReducer = (state = initState, action) => {
       const {
         query,
         nodes,
-        pageInfo: { hasPreviousPage, endCursor }
+        pageInfo: { hasPreviousPage, startCursor }
       } = action.payload;
+
+      const prevQueries = [...state.prevQueries];
+
+      if (!prevQueries.includes(query)) {
+        prevQueries.push(query);
+      }
 
       return {
         ...state,
         query,
-        prevQueries: [...state.prevQueries, query],
+        prevQueries,
         hasPrevPage: hasPreviousPage,
-        cursor: endCursor,
-        posts: nodes
+        cursor: startCursor,
+        posts: [...state.posts, ...nodes]
       };
     }
 

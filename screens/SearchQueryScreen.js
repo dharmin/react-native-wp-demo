@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import client from '../graphql/config';
 import searchPosts from '../graphql/queries/searchPosts';
@@ -12,9 +12,15 @@ import SearchQuery from '../components/Search/SearchQuery';
 const SearchQueryScreen = ({ navigation }) => {
   const [, setLoading] = useSearchedNewsListLoaderContext();
   const dispatch = useDispatch();
+  const globalQuery = useSelector(state => state.search.query);
 
   const handleQuerySubmit = (query) => {
     if (query) {
+      if (query === globalQuery) {
+        navigation.navigate('SearchedNews');
+        return;
+      }
+
       // Fetches data according to the query
       setLoading(true);
       navigation.navigate('SearchedNews');
