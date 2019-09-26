@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import React from 'react';
+import {
+  View, StyleSheet, SafeAreaView, TouchableOpacity
+} from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,7 +38,8 @@ const SearchQueryScreen = ({ navigation }) => {
           setSearchData({
             query,
             nodes,
-            pageInfo
+            pageInfo,
+            replacePost: true
           })
         ))
         .then(() => setLoading(false));
@@ -47,6 +50,9 @@ const SearchQueryScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <SearchQuery handleQuerySubmit={handleQuerySubmit} disabled={false} />
+        <View>
+          <TouchableOpacity />
+        </View>
       </View>
     </SafeAreaView>
   );
