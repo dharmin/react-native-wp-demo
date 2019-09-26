@@ -1,6 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import {
+  View, StyleSheet, Dimensions, Platform
+} from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import NewsItem from './NewsItem';
 import MainLoader from '../Loaders/MainLoader';
 
@@ -25,7 +28,8 @@ const SearchNewsItem = ({ loading, post, scrollToPosition }) => (
 const styles = StyleSheet.create({
   container: {
     width,
-    flex: 1
+    flex: 1,
+    marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0
   }
 });
 

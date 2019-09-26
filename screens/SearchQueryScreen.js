@@ -1,6 +1,10 @@
 import React from 'react';
 import {
-  View, StyleSheet, SafeAreaView, TouchableOpacity
+  View,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Text
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,11 +14,14 @@ import searchPosts from '../graphql/queries/searchPosts';
 import { setSearchData } from '../store/actions/search.actions';
 import useSearchedNewsListLoaderContext from '../contexts/SearchedNewsListLoaderContext';
 import SearchQuery from '../components/Search/SearchQuery';
+import PrevSearchesList from '../components/NewsList/PrevSearchesList';
 
 const SearchQueryScreen = ({ navigation }) => {
   const [, setLoading] = useSearchedNewsListLoaderContext();
   const dispatch = useDispatch();
-  const globalQuery = useSelector(state => state.search.query);
+  const { query: globalQuery, prevQueries } = useSelector(
+    state => state.search
+  );
 
   const handleQuerySubmit = (query) => {
     if (query) {
@@ -50,9 +57,12 @@ const SearchQueryScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <SearchQuery handleQuerySubmit={handleQuerySubmit} disabled={false} />
-        <View>
-          <TouchableOpacity />
-        </View>
+        {prevQueries.length !== 0 && (
+          <PrevSearchesList
+            prevQueries={prevQueries}
+            handleQuerySubmit={handleQuerySubmit}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -62,6 +72,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%'
+  },
+  lastHeadContainer: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    padding: 15
+  },
+  lastHead: {
+    fontSize: 16,
+    fontFamily: 'roboto'
+  },
+  prevItem: {
+    padding: 15,
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 1
+  },
+  itemText: {
+    fontFamily: 'robotoLight',
+    fontSize: 16
   }
 });
 
