@@ -15,6 +15,8 @@ import useNewsScreenLoaderContext from '../../contexts/NewsScreenLoaderContext';
 import getPostsByCategory from '../../graphql/queries/postsByCategory';
 import client from '../../graphql/config';
 import { setPosts } from '../../store/actions/common.actions';
+import getInitialPostsQuery from '../../graphql/queries/getInitialPosts';
+import { setInitialPosts } from '../../store/actions/posts.actions';
 
 const { width } = Dimensions.get('window');
 
@@ -24,25 +26,40 @@ const Category = ({ title, setMainScrollPosition, id }) => {
   const currentCategory = useSelector(
     state => state.categories.currentCategory
   );
-  const setCategory = () => {
-    if (currentCategory === id) return;
+  const setCategory = (isAllNewsClicked) => {
+    if (isAllNewsClicked) {
+      // TODO:
+      // Get initial data
+      Promise.resolve(setIsLoading(true))
+        .then(() => Promise.resolve(setMainScrollPosition(width)))
+        .then(async () => {
+          const { data } = await client.query({
+            query: getInitialPostsQuery
+          });
 
-    dispatch(changeCurrentCategory(id))
-      .then(() => Promise.resolve(setIsLoading(true)))
-      .then(() => Promise.resolve(setMainScrollPosition(width)))
-      .then(async () => {
-        const { data } = await client.query({
-          query: getPostsByCategory,
-          variables: { categoryId: id }
-        });
+          return dispatch(setInitialPosts(data));
+        })
+        .then(() => setIsLoading(false));
+    } else {
+      if (currentCategory === id) return;
 
-        return dispatch(setPosts(data, true));
-      })
-      .then(() => setIsLoading(false));
+      dispatch(changeCurrentCategory(id))
+        .then(() => Promise.resolve(setIsLoading(true)))
+        .then(() => Promise.resolve(setMainScrollPosition(width)))
+        .then(async () => {
+          const { data } = await client.query({
+            query: getPostsByCategory,
+            variables: { categoryId: id }
+          });
+
+          return dispatch(setPosts(data, true));
+        })
+        .then(() => setIsLoading(false));
+    }
   };
 
   return (
-    <TouchableOpacity onPress={setCategory}>
+    <TouchableOpacity onPress={() => setCategory(title === 'All News')}>
       <View style={styles.container}>
         <Ionicons name="md-bookmark" size={40} color={colors.highlight} />
         <View style={styles.textContainer}>

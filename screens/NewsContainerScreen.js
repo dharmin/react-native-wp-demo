@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -31,6 +31,10 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
   const { data: news, endCursor, nextPage } = useSelector(state => state.news);
   const { currentCategory } = useSelector(state => state.categories);
   const { currentTag } = useSelector(state => state.tags);
+
+  // useEffect(() => {
+
+  // }, []);
 
   const dispatch = useDispatch();
 
@@ -92,7 +96,7 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
             dispatch(
               currentCategory || currentTag
                 ? setPosts(data.data, false)
-                : getNextPosts(data)
+                : getNextPosts(data.data)
             );
           });
       }

@@ -1,4 +1,9 @@
-import { INIT_QUERY, CHANGE_CATEGORY, CHANGE_TAG } from '../types';
+import {
+  INIT_QUERY,
+  CHANGE_CATEGORY,
+  CHANGE_TAG,
+  SET_INITIAL_POSTS
+} from '../types';
 
 const initState = {
   data: [],
@@ -8,6 +13,11 @@ const initState = {
 };
 
 const categoriesReducer = (state = initState, action) => {
+  const setInitialCategoryValue = () => ({
+    ...state,
+    currentCategory: null
+  });
+
   switch (action.type) {
     case INIT_QUERY: {
       const {
@@ -32,12 +42,11 @@ const categoriesReducer = (state = initState, action) => {
       };
     }
 
-    case CHANGE_TAG: {
-      return {
-        ...state,
-        currentCategory: null
-      };
-    }
+    case CHANGE_TAG:
+      return setInitialCategoryValue();
+
+    case SET_INITIAL_POSTS:
+      return setInitialCategoryValue();
 
     default:
       return state;

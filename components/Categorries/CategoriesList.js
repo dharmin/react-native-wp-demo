@@ -20,6 +20,10 @@ const CategoriesList = ({ setMainScrollPosition }) => {
         <SubHeaderTitle>CATEGORIES</SubHeaderTitle>
       </View>
       <ScrollView>
+        <Category
+          title="All News"
+          setMainScrollPosition={setMainScrollPosition}
+        />
         {categories.map(({ node: { name, id, categoryId } }) => (
           <Category
             key={id}

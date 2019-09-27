@@ -1,4 +1,9 @@
-import { INIT_QUERY, CHANGE_CATEGORY, CHANGE_TAG } from '../types';
+import {
+  INIT_QUERY,
+  CHANGE_CATEGORY,
+  CHANGE_TAG,
+  SET_INITIAL_POSTS
+} from '../types';
 
 const initState = {
   data: [],
@@ -8,6 +13,11 @@ const initState = {
 };
 
 const tagsReducer = (state = initState, action) => {
+  const setInitialTagValue = () => ({
+    ...state,
+    currentTag: null
+  });
+
   switch (action.type) {
     case INIT_QUERY: {
       const {
@@ -34,12 +44,11 @@ const tagsReducer = (state = initState, action) => {
       };
     }
 
-    case CHANGE_CATEGORY: {
-      return {
-        ...state,
-        currentTag: null
-      };
-    }
+    case CHANGE_CATEGORY:
+      return setInitialTagValue();
+
+    case SET_INITIAL_POSTS:
+      return setInitialTagValue();
 
     default:
       return state;

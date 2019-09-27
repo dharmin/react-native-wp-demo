@@ -1,4 +1,9 @@
-import { INIT_QUERY, SET_POSTS, GET_NEXT_SET_OF_POSTS } from '../types';
+import {
+  INIT_QUERY,
+  SET_POSTS,
+  GET_NEXT_SET_OF_POSTS,
+  SET_INITIAL_POSTS
+} from '../types';
 
 const initState = {
   data: [],
@@ -7,6 +12,22 @@ const initState = {
 };
 
 const newsReducer = (state = initState, action) => {
+  const setPostsData = (actionType, initial) => {
+    const {
+      posts: {
+        edges,
+        pageInfo: { endCursor, hasNextPage }
+      }
+    } = actionType.payload;
+
+    return {
+      ...state,
+      data: initial ? edges : [...state.data, ...edges],
+      endCursor,
+      nextPage: hasNextPage
+    };
+  };
+
   switch (action.type) {
     case INIT_QUERY: {
       const {
@@ -42,19 +63,11 @@ const newsReducer = (state = initState, action) => {
     }
 
     case GET_NEXT_SET_OF_POSTS: {
-      const {
-        posts: {
-          edges,
-          pageInfo: { endCursor, hasNextPage }
-        }
-      } = action.payload;
+      return setPostsData(action, false);
+    }
 
-      return {
-        ...state,
-        data: [...state.data, ...edges],
-        endCursor,
-        nextPage: hasNextPage
-      };
+    case SET_INITIAL_POSTS: {
+      return setPostsData(action, true);
     }
 
     default:

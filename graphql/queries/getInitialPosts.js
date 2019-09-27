@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
-const getNextSetOfPosts = gql`
-  query GetNextSetOfPosts($cursor: String) {
-    posts(first: 10, after: $cursor) {
+const getInitialPostsQuery = gql`
+  query GetInitialPosts {
+    posts(first: 10) {
       edges {
         node {
           id
@@ -22,4 +22,4 @@ const getNextSetOfPosts = gql`
   }
 `;
 
-export default getNextSetOfPosts;
+export default getInitialPostsQuery;
