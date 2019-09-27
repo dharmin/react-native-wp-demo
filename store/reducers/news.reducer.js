@@ -25,10 +25,19 @@ const newsReducer = (state = initState, action) => {
     }
 
     case SET_POSTS: {
-      const { posts } = action.payload;
+      const {
+        posts: {
+          nodes,
+          pageInfo: { endCursor, hasNextPage }
+        },
+        fetchedFirstTime
+      } = action.payload;
+
       return {
         ...state,
-        data: posts.nodes
+        data: fetchedFirstTime ? nodes : [...state.data, ...nodes],
+        endCursor,
+        nextPage: hasNextPage
       };
     }
 

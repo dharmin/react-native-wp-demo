@@ -1,9 +1,9 @@
 import { gql } from 'apollo-boost';
 
 const getPostsByTag = gql`
-  query getPostsByTag($categoryId: ID!) {
-    tag(id: $categoryId) {
-      posts {
+  query getPostsByTag($tagId: ID!, $cursor: String) {
+    tag(id: $tagId) {
+      posts(first: 10, after: $cursor) {
         nodes {
           title
           excerpt
@@ -12,6 +12,10 @@ const getPostsByTag = gql`
           featuredImage {
             sourceUrl
           }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
     }

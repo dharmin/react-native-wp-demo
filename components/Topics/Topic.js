@@ -30,10 +30,10 @@ const Topic = ({ title, id, setMainScrollPosition }) => {
       .then(async () => {
         const { data } = await client.query({
           query: getPostsByTag,
-          variables: { categoryId: id }
+          variables: { tagId: id }
         });
 
-        return dispatch(setPosts(data));
+        return dispatch(setPosts(data, true));
       })
       .then(() => setIsLoading(false));
   };

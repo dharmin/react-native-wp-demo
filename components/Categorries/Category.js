@@ -36,7 +36,7 @@ const Category = ({ title, setMainScrollPosition, id }) => {
           variables: { categoryId: id }
         });
 
-        return dispatch(setPosts(data));
+        return dispatch(setPosts(data, true));
       })
       .then(() => setIsLoading(false));
   };

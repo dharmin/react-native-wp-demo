@@ -19,6 +19,9 @@ import BackButton from '../components/Buttons/BackButton';
 import client from '../graphql/config';
 import getNextSetOfPosts from '../graphql/queries/nextSetOfPosts';
 import { getNextPosts } from '../store/actions/posts.actions';
+import getPostsByCategory from '../graphql/queries/postsByCategory';
+import getPostsByTag from '../graphql/queries/postsByTag';
+import { setPosts } from '../store/actions/common.actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -26,6 +29,8 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
   const [isLoading] = useNewsScreenLoaderContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: news, endCursor, nextPage } = useSelector(state => state.news);
+  const { currentCategory } = useSelector(state => state.categories);
+  const { currentTag } = useSelector(state => state.tags);
 
   const dispatch = useDispatch();
 
@@ -57,14 +62,39 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
           position.current.setValue({ x: 0, y: 0 });
           return;
         }
+
+        let currentQuery;
+        let variables = {};
+
+        if (currentCategory) {
+          currentQuery = getPostsByCategory;
+          variables = {
+            categoryId: currentCategory
+          };
+        } else if (currentTag) {
+          currentQuery = getPostsByTag;
+          variables = {
+            tagId: currentTag
+          };
+        } else {
+          currentQuery = getNextSetOfPosts;
+        }
+
         client
           .query({
-            query: getNextSetOfPosts,
+            query: currentQuery,
             variables: {
+              ...variables,
               cursor: endCursor
             }
           })
-          .then(data => dispatch(getNextPosts(data)));
+          .then((data) => {
+            dispatch(
+              currentCategory || currentTag
+                ? setPosts(data.data, false)
+                : getNextPosts(data)
+            );
+          });
       }
 
       if (currentIndex > 0 && gesture.dy > 50 && gesture.vy > 0.7) {
