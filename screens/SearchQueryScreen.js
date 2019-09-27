@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Text
-} from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -8,7 +8,7 @@ import {
   PanResponder,
   Text
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import NewsItem from '../components/NewsList/NewsItem';
 
@@ -16,13 +16,18 @@ import MainLoader from '../components/Loaders/MainLoader';
 import useNewsScreenLoaderContext from '../contexts/NewsScreenLoaderContext';
 import colors from '../constants/colors';
 import BackButton from '../components/Buttons/BackButton';
+import client from '../graphql/config';
+import getNextSetOfPosts from '../graphql/queries/nextSetOfPosts';
+import { getNextPosts } from '../store/actions/posts.actions';
 
 const { width, height } = Dimensions.get('window');
 
 const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
   const [isLoading] = useNewsScreenLoaderContext();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const news = useSelector(state => state.news.data);
+  const { data: news, endCursor, nextPage } = useSelector(state => state.news);
+
+  const dispatch = useDispatch();
 
   const position = useRef(new Animated.ValueXY());
   const swipedPosition = useRef(new Animated.ValueXY({ x: 0, y: -height }));
@@ -31,8 +36,10 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gesture) => {
       if (gesture.dy < 0 && currentIndex === news.length - 1) {
-        position.current.setValue({ x: 0, y: 0 });
-        return;
+        if (!nextPage) {
+          position.current.setValue({ x: 0, y: 0 });
+          return;
+        }
       }
 
       if (gesture.dy > 0 && currentIndex > 0) {
@@ -46,8 +53,18 @@ const NewsContainerScreen = React.memo(({ setMainScrollPosition }) => {
     },
     onPanResponderRelease: (e, gesture) => {
       if (gesture.dy < 0 && currentIndex === news.length - 1) {
-        position.current.setValue({ x: 0, y: 0 });
-        return;
+        if (!nextPage) {
+          position.current.setValue({ x: 0, y: 0 });
+          return;
+        }
+        client
+          .query({
+            query: getNextSetOfPosts,
+            variables: {
+              cursor: endCursor
+            }
+          })
+          .then(data => dispatch(getNextPosts(data)));
       }
 
       if (currentIndex > 0 && gesture.dy > 50 && gesture.vy > 0.7) {
