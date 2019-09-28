@@ -1,9 +1,9 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import SubHeaderTitle from '../Text/SubHeaderTitle';
 import Category from './Category';
-import useMainHorizontalContext from '../../contexts/MainHorizontalContext';
+// import useMainHorizontalContext from '../../contexts/MainHorizontalContext';
 
 const CategoriesList = ({ setMainScrollPosition }) => {
   // const [, setIsMainHorizontalScroll] = useMainHorizontalContext();
@@ -19,7 +19,7 @@ const CategoriesList = ({ setMainScrollPosition }) => {
       <View style={styles.titleContainer}>
         <SubHeaderTitle>CATEGORIES</SubHeaderTitle>
       </View>
-      <ScrollView>
+      <View style={styles.categoryContainer}>
         <Category
           title="All News"
           setMainScrollPosition={setMainScrollPosition}
@@ -32,7 +32,7 @@ const CategoriesList = ({ setMainScrollPosition }) => {
             id={id}
           />
         ))}
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -46,7 +46,12 @@ const styles = StyleSheet.create({
   titleContainer: {
     width: '80%'
   },
-  list: {}
+  list: {},
+  categoryContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flexGrow: 1
+  }
 });
 
 export default CategoriesList;
