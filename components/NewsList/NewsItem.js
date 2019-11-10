@@ -6,7 +6,8 @@ import {
   View,
   Animated,
   Image,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import colors from '../../constants/colors';
 import BackButton from '../Buttons/BackButton';
@@ -41,7 +42,9 @@ const NewsItem = (props) => {
   return (
     <MainAnimatedView>
       <View style={styles.newsContainer}>
-        <BackButton setMainScrollPosition={setMainScrollPosition} />
+        {
+          Platform.OS === 'android' && <BackButton setMainScrollPosition={setMainScrollPosition} />
+        }
         <View style={{ flex: 2, alignItems: 'center' }}>
           <Image
             source={featuredImage ? { uri: featuredImage.sourceUrl } : image}

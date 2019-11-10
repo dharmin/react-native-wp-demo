@@ -1,11 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  Platform
+  ScrollView, StyleSheet, View, Text, Dimensions, Platform
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
@@ -20,6 +15,7 @@ import initQuery from '../graphql/queries/initialQuery';
 import { simpleAction } from '../store/actions/common.actions';
 
 import MainLoader from '../components/Loaders/MainLoader';
+import Header from '../components/Header/Header';
 
 const { width } = Dimensions.get('window');
 
@@ -50,7 +46,6 @@ const MainScreen = () => {
       dispatch(simpleAction(data)).then(() => {
         setIsLoading(false);
         if (ref.current) {
-          // TODO: Need to fix later
           scrollToPosition(width);
         }
       });
@@ -60,22 +55,32 @@ const MainScreen = () => {
   return isLoading ? (
     <MainLoader />
   ) : (
-    <ScrollView
-      style={[styles.main, defaultStyles.flex1]}
-      horizontal
-      pagingEnabled
-      scrollEnabled={isHorizontalScroll}
-      ref={view => (ref.current = view)}
-    >
-      <LeftMainLinksScreen setMainScrollPosition={scrollToPosition} />
-      <NewsContainerScreen setMainScrollPosition={scrollToPosition} />
-    </ScrollView>
-  );
+      <ScrollView
+        style={[styles.main, defaultStyles.flex1]}
+        horizontal
+        pagingEnabled
+        scrollEnabled={isHorizontalScroll}
+        ref={view => (ref.current = view)}
+      >
+        {
+          Platform.OS === 'ios' && (
+            <Header
+              title1="Discover"
+              title2="My Feed"
+              setMainScrollPosition={scrollToPosition}
+            />
+          )
+        }
+        <LeftMainLinksScreen setMainScrollPosition={scrollToPosition} />
+        <NewsContainerScreen setMainScrollPosition={scrollToPosition} />
+      </ScrollView>
+    );
 };
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: getStatusBarHeight()
+    marginTop: getStatusBarHeight(),
+    position: 'relative'
   }
 });
 
